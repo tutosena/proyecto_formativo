@@ -140,7 +140,7 @@ https://templatemo.com/tm-559-zay-shop
                             <a class="nav-link" href="">Proveedor</a>
                             <ul>
                                 
-                                <li class="nav-item"><a class="nav-link" href="">Consultar proveedor</a></li>
+                                <li class="nav-item"><a class="nav-link" href="">NIT proveedor</a></li>
                                 
                             </ul>
                         </li>
