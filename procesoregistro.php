@@ -9,6 +9,8 @@
 
 	<?php
 
+		session_start();
+
 		
 
 		//variable de usuario*****
@@ -141,7 +143,28 @@ if(isset($_POST["id_identificacion"]) &&
 						}else if ($verificar>0){
 
 							$mysqli->close();
-							header("location:registroexitoso.php");
+
+							
+
+							if(isset($_SESSION['usuario_sesion'])){
+
+								if($_SESSION['rol'] == 'administrador'){
+
+									$_SESSION['mensajeExitoso'] = 'ok';
+									
+									header('location:interfaz_admin.php');
+
+
+								}else if($_SESSION['rol'] == 'cliente'){
+
+									header('location:interfaz_usuario.php');
+								}
+
+							}else{
+
+								header("location:registroexitoso.php");
+							}
+							
 							
 
 						}else{

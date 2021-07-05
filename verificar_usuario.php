@@ -88,8 +88,10 @@
 								$datosresultado = $resultado->fetch_all(MYSQLI_ASSOC);
 
 								foreach ($datosresultado as $midato) {
+
 									session_start();
 									$_SESSION['usuario_sesion'] =$midato['nombre'];
+
 									$rol = $midato['rol'];
 								}
 
@@ -97,22 +99,24 @@
 							}
 
 
-
-							
 							 
 							$mysqli->close();
 
 							if($rol == 'administrador')	{
 
+								$_SESSION['rol'] = $rol;
+
 								header("location:interfaz_admin.php");
 
-							}elseif($rol=='cliente' ){
+							}elseif($rol=='cliente'){
+
+								$_SESSION['rol'] = $rol;
 
 								header("location:interfaz_usuario.php");
 								
 							}else{
 
-								header("location:accesousuario.php");
+								header("location:index.php");
 							}
 
 							

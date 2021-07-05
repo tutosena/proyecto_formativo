@@ -1,3 +1,20 @@
+<!--Verificando sesion-->
+
+        <?php
+
+            session_start();
+
+            if(!isset($_SESSION['usuario_sesion'])){
+
+                header("location:index.php");
+                
+            }
+
+        ?>
+      
+
+    <!--Fin de verificar sesión-->
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -42,26 +59,49 @@ https://templatemo.com/tm-559-zay-shop
         display: block;
 
     }
+     #conteformu{
+        display: flex; 
+        justify-content: center;
+        width: 96%;
+    }
+    #formulario{
+        width: 600px;
+        margin: 20px;
+    }
+    .espaciocaja{
+        margin-bottom: 10px;
+
+    }
+
+    h3{
+        
+        text-align: center;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+    #cajaerror{
+        margin-top: 20px;
+        margin-bottom: 20px;
+
+    }
+
+    .lgris
+    {
+
+    color: rgb(60,72,248);
+
+    }
+
+    .centrado{
+
+        text-align: center;
+    }
+
 </style>
 </head>
 
 <body>
-    <!--Verificando sesion-->
-
-        <?php
-
-            session_start();
-
-            if(!isset($_SESSION['usuario_sesion'])){
-
-                header("location:index.php");
-                
-            }
-
-        ?>
-      
-
-    <!--Fin de verificar sesión-->
+    
 
     <!-- Start Top Nav -->
     <nav class="navbar navbar-expand-lg bg-dark navbar-light d-none d-lg-block" id="templatemo_nav_top">
@@ -101,16 +141,18 @@ https://templatemo.com/tm-559-zay-shop
                         <li class="nav-item">
                             <a class="nav-link" href="">Clientes</a>
                              <ul>
+                                <li class="nav-item"><a class="nav-link" href="asigVariableSession.php?control=regUsua">Registro Usuario</a></li>
                                 
-                                <li class="nav-item"><a class="nav-link" href="">Cliente Identificación</a></li>
-                                  <li class="nav-item"><a class="nav-link" href="">Cliente Usuario</a></li>
+                                <li class="nav-item"><a class="nav-link" href="asigVariableSession.php?control=cliIdenti">Cliente Identificación</a></li>
+                                  <li class="nav-item"><a class="nav-link" href="asigVariableSession.php?control=cliUsua">Clientes Usuario</a></li>
+                                  <li class="nav-item"><a class="nav-link" href="">Todos los Usuario</a></li>
                                 
                             </ul>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="">Productos</a>
                             <ul>
-                                
+                                <li class="nav-item"><a class="nav-link" href="">Registro Producto</a></li>
                                 <li class="nav-item"><a class="nav-link" href="">Producto por Código</a></li>
                                 <li class="nav-item"><a class="nav-link" href="">Producto por Nombre</a></li>
                                 <li class="nav-item"><a class="nav-link" href="">Producto por Categoría</a></li>
@@ -121,6 +163,8 @@ https://templatemo.com/tm-559-zay-shop
                         <li class="nav-item">
                             <a class="nav-link" href="">Pedidos</a>
                             <ul>
+
+                                <li class="nav-item"><a class="nav-link" href="">Registro Pedido</a></li>
                                 
                                 <li class="nav-item"><a class="nav-link" href="">Consultar pedido</a></li>
                                 
@@ -129,6 +173,8 @@ https://templatemo.com/tm-559-zay-shop
                         <li class="nav-item">
                             <a class="nav-link" href="">Factura</a>
                             <ul>
+
+                                <li class="nav-item"><a class="nav-link" href="">Registro Factura</a></li>
                                 
                                 <li class="nav-item"><a class="nav-link" href="">Consultar consecutivo</a></li>
                                 <li class="nav-item"><a class="nav-link" href="">Consultar fecha</a></li>
@@ -139,7 +185,7 @@ https://templatemo.com/tm-559-zay-shop
                          <li class="nav-item">
                             <a class="nav-link" href="">Proveedor</a>
                             <ul>
-                                
+                                <li class="nav-item"><a class="nav-link" href="">Registro Proveedor</a></li>
                                 <li class="nav-item"><a class="nav-link" href="">NIT proveedor</a></li>
                                 
                             </ul>
@@ -181,21 +227,121 @@ https://templatemo.com/tm-559-zay-shop
 
         </div>
     </nav>
-    <!-- Close Header -->
+    <!-- Inicio de Mostrar Informacion de consultas -->
 
-    
+    <?php
+
+        if(isset($_SESSION['controlAdmin'])){
+
+            if($_SESSION['controlAdmin']=='regUsua')
+                {
+                    
+                    
+                    if(isset($_SESSION['mensajeExitoso'])){
+
+
+                         unset($_SESSION['mensajeExitoso']);
+
+                        include('registroexitosoAdmin.php');
+
+                    }else{
+
+                        include('registroUsuarioAdmin.php');
+                    }
+                    
+
+                                    
+
+                 }elseif($_SESSION['controlAdmin'] == 'cliIdenti'){
+
+                   
+
+                        include ('btnconsultarCliente.php');
+
+                        if(isset($_POST['id_identificacion'])){
+
+
+                            $id_identificacion = $_POST['id_identificacion'];
+
+                            include('funciones.php');
+
+                            $miconexion = conectarbd();
+
+                            $consultasql = "SELECT * FROM tblusuario WHERE id_identificacion = '{$id_identificacion}'";
+
+                             $filaConsultada= consultar($miconexion,$consultasql);
+
+                                 if(!empty($filaConsultada)){
+
+
+                                   include('resultadoConsulta.php');
+
+                                   
+                                 }else{
+
+                                    echo "<h3 class='centrado'>No existe usuario</h3>";
+
+
+                                 }
+
+
+
+                        }
+
+                        
+
+                     }elseif($_SESSION['controlAdmin']=='cliUsua'){
+
+                        include 'btnconsultarUsuarios.php';
+
+                        if(isset($_POST['email'])){
+
+
+                            $email = $_POST['email'];
+
+                            include('funciones.php');
+
+                            $miconexion = conectarbd();
+
+                            $consultasql = "SELECT * FROM tblusuario WHERE email = '{$email}'";
+
+                             $filaConsultada= consultar($miconexion,$consultasql);
+
+                                 if(!empty($filaConsultada)){
+
+
+                                   include('resultadoConsulta.php');
+
+                                   
+                                 }else{
+
+                                    echo "<h3 class='centrado'>No existe usuario</h3>";
+
+
+                                 }
+
+
+
+                        }
+
+
+
+                   
+
+
+                    }
+
+                 
+                 
+            }
+
+           
+
+        
    
-    <!-- End Banner Hero -->
-
-
-    <!-- Start Categories of The Month -->
     
-    <!-- End Categories of The Month -->
 
-
-    <!-- Start Featured Product -->
-    
-    <!-- End Featured Product -->
+    ?>
 
 
     <!-- Start Footer -->
