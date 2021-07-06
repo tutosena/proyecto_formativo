@@ -47,7 +47,10 @@
                 <label for="pwd">Repetir Password:</label>
                 <input type="password" class="form-control espaciocaja" placeholder="Repetir password"  name="repetirclave" required>
               </div>
+
+
               <button type="submit" class="btn btn-primary">Registrar</button>
+              
               <button  onclick="location.href='volverInicio.php'" class="btn btn-primary">Volver</button>
         </form>
     </div>

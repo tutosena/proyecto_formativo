@@ -64,7 +64,7 @@ https://templatemo.com/tm-559-zay-shop
         justify-content: center;
         width: 96%;
     }
-    #formulario{
+    .formulario{
         width: 600px;
         margin: 20px;
     }
@@ -231,28 +231,30 @@ https://templatemo.com/tm-559-zay-shop
 
     <?php
 
-        if(isset($_SESSION['controlAdmin'])){
+        if(isset($_SESSION['controlAdmin']))
+        {
 
-            if($_SESSION['controlAdmin']=='regUsua')
-                {
+                if($_SESSION['controlAdmin']=='regUsua')
+                    {
                     
                     
-                    if(isset($_SESSION['mensajeExitoso'])){
+                        if(isset($_SESSION['mensajeExitoso'])){
 
 
-                         unset($_SESSION['mensajeExitoso']);
+                                 unset($_SESSION['mensajeExitoso']);
 
-                        include('registroexitosoAdmin.php');
+                                include('registroexitosoAdmin.php');
 
-                    }else{
+                            }else{
 
-                        include('registroUsuarioAdmin.php');
-                    }
+                                 include('registroUsuarioAdmin.php');
+
+                                }
                     
 
                                     
 
-                 }elseif($_SESSION['controlAdmin'] == 'cliIdenti'){
+                    }elseif($_SESSION['controlAdmin'] == 'cliIdenti'){
 
                    
 
@@ -271,46 +273,101 @@ https://templatemo.com/tm-559-zay-shop
 
                              $filaConsultada= consultar($miconexion,$consultasql);
 
-                                 if(!empty($filaConsultada)){
+                                     if(!empty($filaConsultada)){
+
+                                            unset($_POST['id_identificacion']);
+
+                                           include_once('resultadoConsulta.php');
+
+                                       
+                                     }else{
+
+                                            echo "<h3 class='centrado'>No existe usuario</h3>";
 
 
-                                   include('resultadoConsulta.php');
-
-                                   
-                                 }else{
-
-                                    echo "<h3 class='centrado'>No existe usuario</h3>";
-
-
-                                 }
+                                     }
 
 
 
-                        }
+                            }
 
                         
 
-                     }elseif($_SESSION['controlAdmin']=='cliUsua'){
+                    }elseif($_SESSION['controlAdmin']=='cliUsua'){
 
                         include 'btnconsultarUsuarios.php';
 
                         if(isset($_POST['email'])){
 
 
-                            $email = $_POST['email'];
+                                $email = $_POST['email'];
+
+                                include('funciones.php');
+
+                                $miconexion = conectarbd();
+
+                                $consultasql = "SELECT * FROM tblusuario WHERE email = '{$email}'";
+
+                                 $filaConsultada= consultar($miconexion,$consultasql);
+
+                                         if(!empty($filaConsultada)){
+
+                                            unset($_POST['email']);
+
+                                           include_once('resultadoConsulta.php');
+
+                                           
+                                         }else{
+
+                                            echo "<h3 class='centrado'>No existe usuario</h3>";
+
+
+                                         }
+
+
+
+                            }
+
+
+                    }elseif($_SESSION['controlAdmin'] == 'modificar'){
 
                             include('funciones.php');
 
+                            
+
+                            $id_identificacion = $_SESSION['id_usuario'];
+
                             $miconexion = conectarbd();
 
-                            $consultasql = "SELECT * FROM tblusuario WHERE email = '{$email}'";
+                            $consultasql = "SELECT * FROM tblusuario WHERE id_identificacion = '{$id_identificacion}'";
 
                              $filaConsultada= consultar($miconexion,$consultasql);
 
                                  if(!empty($filaConsultada)){
 
 
-                                   include('resultadoConsulta.php');
+                                   include_once('resultadoConsultaModi.php');
+
+                                        $emailUsuario = $filaConsultada->email;
+
+                                        $miconexion = conectarbd();
+
+                                    $consultasql = "SELECT * FROM tblloggin WHERE pk_nick_loggin = '{$emailUsuario}'";
+
+                                     $filaConsultada= consultar($miconexion,$consultasql);
+
+                                             if(!empty($filaConsultada)){
+
+
+                                               include_once('resultadoConsultaUsua.php');
+
+                                               
+                                             }else{
+
+                                                echo "<h3 class='centrado'>No existe usuario</h3>";
+
+
+                                             }
 
                                    
                                  }else{
@@ -320,26 +377,42 @@ https://templatemo.com/tm-559-zay-shop
 
                                  }
 
+                    }elseif($_SESSION['controlAdmin'] == 'eliminar'){
 
 
-                        }
+                        unset($_SESSION['controlAdmin']);
+
+                        include("eliminadoExitoso.php");
 
 
 
-                   
+                    }elseif($_SESSION['controlAdmin'] == "modiExitosa"){
 
+                        unset($_SESSION['controlAdmin']);
+
+                        include('registroexitosoAdminModi.php');
+
+
+                    }elseif($_SESSION['controlAdmin'] == "errorModi"){
+
+                        unset($_SESSION['controlAdmin']);
+
+                        include('errorModi.php');
+
+                    }elseif($_SESSION['controlAdmin'] == 'errorEliminar'){
+
+
+                        unset($_SESSION['controlAdmin']);
+
+                        include("errorElimando.php");
 
                     }
 
                  
                  
-            }
-
-           
-
         
-   
-    
+
+        }
 
     ?>
 

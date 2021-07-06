@@ -26,7 +26,7 @@
 
 		$numFilas = $resultado->num_rows;
 
-		if($numFilas >0){
+		if($numFilas>0){
 
 			$fila = $resultado->fetch_object();
 
@@ -80,21 +80,21 @@
 
 		$resultado = $conexion->real_query($consultasql);
 
-		$numFilas = $resultado->affected_rows;
+		$numFilas = $conexion->affected_rows;
 
 		if($numFilas >0){
 
-			
+			$conexion->close();
 
-			return $fila;
+
+			return $numFilas;
 
 		}else{
 
 			$conexion->close();
 
 			
-
-			return $fila;
+			return $numFilas;
 
 		}
 	}
@@ -103,23 +103,24 @@
 
 		$resultado = $conexion->real_query($consultasql);
 
-		$numFilas = $resultado->affected_rows;
+		
+		if($conexion->affected_rows>0){
 
-		if($numFilas >0){
-
-			
+			$numFilas = $conexion->affected_rows;
 
 			$conexion->close();
 
-			return $fila;
+			return $numFilas;
 
 		}else{
 
-			$conexion->close();
-
 			
 
-			return $fila;
+			$numFilas = $conexion->affected_rows;
+
+			$conexion->close();
+
+			return $numFilas;
 
 		}
 
